@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Descent: a parallax dive into the ocean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Figtree:wght@400;600&display=swap">
+<style>
+:root{--sky1:#8fdcff;--sky2:#d6f4ff;--sun:#fff0a8;--cl:rgba(255,255,255,.9);--card:rgba(255,255,255,.8);--tx:#06293d;--mut:#2d566e;--acc:#ff7a45;--line:rgba(6,41,61,.18);--h:"Fraunces",Georgia,serif;--b:"Figtree",system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky1:#0c1235;--sky2:#2a2f68;--sun:#e6eaff;--cl:rgba(190,200,255,.16);--card:rgba(5,16,34,.66);--tx:#e7f6ff;--mut:#a8c8de;--line:rgba(231,246,255,.22)}}
+:root[data-theme="dark"]{--sky1:#0c1235;--sky2:#2a2f68;--sun:#e6eaff;--cl:rgba(190,200,255,.16);--card:rgba(5,16,34,.66);--tx:#e7f6ff;--mut:#a8c8de;--line:rgba(231,246,255,.22)}
+*,*::before,*::after{box-sizing:inherit}
+html{overflow-x:clip}
+body{margin:0;font:400 1.1rem/1.6 var(--b);color:var(--tx);background:#02060f;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--sky1);z-index:30;opacity:.0}
+#bg{position:fixed;inset:0;z-index:-2}
+#vg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 45%,rgba(0,8,20,.35))}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+main{position:relative;overflow:clip}
+.sec{position:relative;min-height:120vh}.s0{min-height:135vh}
+.sc{position:absolute;inset:0;pointer-events:none}
+.ly{position:absolute;will-change:transform;pointer-events:none}
+.ly svg{display:block;width:100%;height:auto;overflow:visible}
+.bl{filter:blur(3px)}
+.tw{position:absolute;inset:0;display:flex;align-items:center;padding:0 clamp(1.25rem,7vw,6rem);z-index:5;pointer-events:none}
+.tw.r{justify-content:flex-end}.tw.t{align-items:flex-start;padding-top:20vh;justify-content:center}
+.txt{pointer-events:auto;max-width:30rem;padding:1.7rem 1.9rem;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;opacity:0;transform:translateY(46px) scale(.97);transition:opacity .8s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.txt.in{opacity:1;transform:none}
+.txt.hero{max-width:44rem;text-align:center;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0}
+h1,h2{font-family:var(--h);font-weight:600;line-height:1;margin:0 0 .9rem;letter-spacing:-.02em}
+h1{font-size:clamp(4rem,14vw,9rem)}h2{font-size:clamp(2rem,5vw,3.4rem)}
+.txt p{margin:0 0 .8rem;color:var(--mut)}.txt p:last-child{margin:0}
+.rng{font-weight:600;color:var(--tx)!important}
+.cue{display:block;width:2px;height:54px;margin:1.6rem auto 0;background:var(--tx);transform-origin:top;animation:dr 1.8s ease-in-out infinite}
+@keyframes dr{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.btn{font:600 1rem var(--b);padding:.8rem 1.4rem;border:0;border-radius:99px;background:var(--acc);color:#2a0f00;cursor:pointer;margin-top:.6rem;transition:transform .2s}.btn:hover{transform:scale(1.06)}
+.sun{width:clamp(90px,14vw,170px);aspect-ratio:1;border-radius:50%;background:var(--sun);box-shadow:0 0 70px 30px var(--sun)}
+.wv{left:0;width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.wv svg{width:200%;animation:wv 14s linear infinite}.wv.b svg{animation-duration:22s}
+@keyframes wv{to{transform:translateX(-50%)}}
+.jf svg{animation:bob 4.5s ease-in-out infinite alternate;filter:drop-shadow(0 0 10px currentColor)}
+@keyframes bob{from{transform:translateY(-12px) scaleY(1.04)}to{transform:translateY(12px) scaleY(.96)}}
+.dt{border-radius:50%;background:currentColor;box-shadow:0 0 8px 2px currentColor;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.25}to{opacity:1}}
+.lure{filter:drop-shadow(0 0 10px #ffe66b) drop-shadow(0 0 24px #ffd23f);animation:tw 2s ease-in-out infinite alternate}
+.ray{background:linear-gradient(rgba(255,255,255,.4),transparent 85%);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%)}
+.vent{background:radial-gradient(closest-side,rgba(255,150,70,.7),transparent);filter:blur(6px)}
+.gauge{position:fixed;left:max(1rem,env(safe-area-inset-left,0px));bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:10;min-width:9.5rem;padding:.7rem 1rem;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;color:var(--tx)}
+.gauge b{font:600 1.7rem var(--h)}.gauge div{font-size:.9rem;color:var(--mut)}
+.trk{height:4px;background:var(--line);margin-top:.5rem;border-radius:4px;overflow:hidden}.trk i{display:block;height:100%;width:0;background:var(--acc)}
+@media(max-width:760px){.tw.r{justify-content:flex-start}.gauge{min-width:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="vg"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="fish" viewBox="0 0 30 14"><path d="M1 7Q10-3 21 7Q10 17 1 7ZM20 7L29 1V13Z" fill="currentColor"/><circle cx="7" cy="6" r="1.2" fill="#06293d"/></symbol>
+<symbol id="jelly" viewBox="0 0 60 100"><path d="M4 42A26 38 0 0 1 56 42Q44 50 30 44Q16 50 4 42Z" fill="currentColor" opacity=".85"/><path d="M14 46Q10 70 16 92M26 46Q22 72 28 96M38 46Q42 72 36 98M48 46Q52 68 46 90" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/></symbol>
+</defs></svg>
+
+<main>
+<section class="sec s0"><div class="sc"></div><div class="tw t"><div class="txt hero"><h1>Dive in.</h1><p>Scroll to sink. Every few hundred metres the light, the pressure and the residents all change.</p><span class="cue"></span></div></div></section>
+<section class="sec"><div class="sc"></div><div class="tw"><div class="txt"><h2>Where the light still reaches.</h2><p class="rng">Sunlight zone, to about 200 m</p><p>Enough sunlight gets through here for algae to grow, which is why most ocean life lives in this thin upper layer.</p></div></div></section>
+<section class="sec"><div class="sc"></div><div class="tw r"><div class="txt"><h2>The light gives up.</h2><p class="rng">Twilight zone, 200 to 1,000 m</p><p>Only a dim blue glow remains, far too weak for photosynthesis. Many animals here swim up at night to feed and sink back by day.</p></div></div></section>
+<section class="sec"><div class="sc"></div><div class="tw"><div class="txt"><h2>Make your own light.</h2><p class="rng">Midnight zone, 1,000 to 4,000 m</p><p>Sunlight never arrives. Many deep-sea animals produce their own glow, called bioluminescence, to lure prey, hide from predators and signal each other.</p></div></div></section>
+<section class="sec"><div class="sc"></div><div class="tw r"><div class="txt"><h2>Cold, dark and crushing.</h2><p class="rng">Abyssal zone, 4,000 m and below</p><p>The pressure is hundreds of times what you feel at the surface, and the water sits close to freezing. Life here is slow, sparse and strange.</p><button class="btn" id="up" type="button">Swim back up</button></div></div></section>
+</main>
+<aside class="gauge" aria-hidden="true"><b id="dn">0</b> m<div id="zn">Surface</div><div class="trk"><i id="tf"></i></div></aside>
+
+<script>
+(function(){
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,secs=[].slice.call(document.querySelectorAll('.sec')),items=[];
+function R(a,b){return a+Math.random()*(b-a)}
+function L(si,html,left,top,w,k,vx,cls){var d=document.createElement('div');d.className='ly '+(cls||'');d.style.cssText='left:'+left+'%;top:'+top+'%;width:'+w+';';d.innerHTML=html;secs[si].querySelector('.sc').appendChild(d);items.push({e:d,k:k,vx:vx||0,a:0});return d}
+var wave='<svg viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 60Q150 10 300 60T600 60T900 60T1200 60V120H0Z" fill="FILL"/></svg>';
+// 0 surface
+L(0,'<div class="sun"></div>',68,10,'auto',.65,0);
+[[6,16,'200px',.55],[40,8,'260px',.4],[78,22,'170px',.3]].forEach(function(c){L(0,'<svg viewBox="0 0 200 80"><g fill="var(--cl)"><circle cx="50" cy="50" r="28"/><circle cx="90" cy="38" r="34"/><circle cx="135" cy="50" r="28"/><rect x="40" y="50" width="105" height="28" rx="14"/></g></svg>',c[0],c[1],c[2],c[3],.05)});
+[[70,'rgba(30,121,180,.35)',.25,''],[76,'rgba(25,105,165,.5)',.05,'b'],[82,'rgba(14,80,135,.65)',-.12,'']].forEach(function(w){L(0,wave.replace('FILL',w[1]),0,w[0],'100%',w[2],0,'wv '+w[3])});
+// 1 sunlight
+[[12,.5],[46,.4],[74,.55]].forEach(function(r){L(1,'<div class="ray" style="height:90vh"></div>',r[0],0,'18%',r[1],0)});
+var fc=['#ffb347','#ff7a45','#ffe27a','#ffd1a0'];
+for(var i=0;i<16;i++){var fl=Math.random()<.35,k=R(-.2,.3),w=R(28,64);L(1,'<svg viewBox="0 0 30 14"'+(fl?' style="transform:scaleX(-1)"':'')+'><use href="#fish"/></svg>',R(0,88),R(8,88),w+'px',k,fl?-R(.08,.2):R(.08,.2),'').style.color=fc[i%4]}
+[[10,60,'190px',-.6,.25],[72,18,'150px',-.5,-.2]].forEach(function(f,j){L(1,'<svg viewBox="0 0 30 14"'+(j?' style="transform:scaleX(-1)"':'')+'><use href="#fish"/></svg>',f[0],f[1],f[2],f[3],f[4],'bl').style.color='#ff9a5a'});
+// 2 twilight
+L(2,'<svg viewBox="0 0 400 140"><use href="#whale"/></svg>'.replace('<use href="#whale"/>','<path d="M8 78C50 14 230 8 306 58C340 78 364 54 394 22C388 62 396 96 380 124C352 104 330 112 304 106C226 134 56 140 8 78Z" fill="currentColor"/>'),-30,14,'78%',.25,.4).style.color='rgba(8,36,74,.7)';
+var jc=['#ff8fd1','#9ad8ff','#c6a6ff','#ffb3e6','#8ff0d8'],js=[[8,60,'70px',.35,0],[34,25,'110px',.15,.03],[60,68,'90px',-.1,-.04],[84,30,'60px',.3,0],[22,80,'210px',-.5,.05]];
+js.forEach(function(j,i){var e=L(2,'<svg viewBox="0 0 60 100"><use href="#jelly"/></svg>',j[0],j[1],j[2],j[3],j[4],'jf'+(i===4?' bl':''));e.style.color=jc[i];e.firstChild.style.animationDelay=(-i*1.1)+'s'});
+// 3 midnight
+var dc=['#7cf5ff','#b6ffd9','#ffe27a','#ff9be8'];
+for(i=0;i<38;i++){var s=R(3,10),e=L(3,'<div class="dt" style="width:'+s+'px;height:'+s+'px;animation-delay:'+R(-3,0)+'s;animation-duration:'+R(2,5)+'s"></div>',R(2,96),R(4,94),'auto',R(-.45,.5),R(-.05,.05));e.style.color=dc[i%4]}
+L(3,'<svg viewBox="0 0 240 170"><path d="M88 56C70 14 38 8 26 30" stroke="#2e7ea3" stroke-width="3" fill="none"/><circle class="lure" cx="26" cy="32" r="9" fill="#fff6b0"/><path d="M190 100L236 68L228 100L236 132Z" fill="#16435d"/><ellipse cx="120" cy="100" rx="75" ry="52" fill="#16435d" stroke="#2e7ea3" stroke-width="2"/><path d="M52 112L68 100L76 118L92 102L100 120L116 106" stroke="#e9f6ff" stroke-width="3" fill="none" stroke-linejoin="round"/><circle cx="84" cy="82" r="9" fill="#e9f6ff"/><circle cx="82" cy="82" r="4" fill="#02060f"/></svg>',50,36,'clamp(200px,28vw,340px)',-.12,-.12);
+// 4 abyss
+var rd='M0 200V120L80 90L160 130L260 70L360 120L470 60L580 125L700 80L820 135L940 75L1060 120L1200 85V200Z';
+[['#061225',.08,'48%'],['#040c18',-.1,'60%'],['#02060f',-.3,'72%']].forEach(function(r){L(4,'<svg viewBox="0 0 1200 200" preserveAspectRatio="none" style="height:34vh"><path d="'+rd+'" fill="'+r[0]+'"/></svg>',-3,parseFloat(r[2]),'106%',r[1],0)});
+[[14,52],[48,60],[80,50]].forEach(function(v){L(4,'<div class="vent" style="height:220px"></div>',v[0],v[1],'150px',.05,0)});
+for(i=0;i<14;i++){s=R(3,7);e=L(4,'<div class="dt" style="width:'+s+'px;height:'+s+'px;animation-delay:'+R(-3,0)+'s"></div>',R(2,96),R(5,60),'auto',R(-.3,.4),0);e.style.color=dc[i%4]}
+
+// engine
+var stops=[[0,[143,220,255]],[.5,[214,244,255]],[1.1,[71,189,233]],[2,[29,121,180]],[3,[11,55,104]],[4,[5,23,47]],[5,[2,6,15]]];
+function hex(h){h=h.trim().replace('#','');return[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
+function theme(){var c=getComputedStyle(document.documentElement);stops[0][1]=hex(c.getPropertyValue('--sky1'));stops[1][1]=hex(c.getPropertyValue('--sky2'));kick()}
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
+function col(s){var i=0;while(i<stops.length-2&&s>stops[i+1][0])i++;var a=stops[i],b=stops[i+1],t=Math.max(0,Math.min(1,(s-a[0])/(b[0]-a[0])));return'rgb('+[0,1,2].map(function(n){return Math.round(a[1][n]+(b[1][n]-a[1][n])*t)}).join(',')+')'}
+var kf=[[.6,0],[1.08,100],[2.08,600],[3.08,2500],[4.2,6000]];
+function depth(s){if(s<=kf[0][0])return 0;for(var i=0;i<kf.length-1;i++)if(s<=kf[i+1][0]){var t=(s-kf[i][0])/(kf[i+1][0]-kf[i][0]);return kf[i][1]+(kf[i+1][1]-kf[i][1])*t}return 6000}
+var vh,H,cur=0,tgt=0,run=false,bgE=document.getElementById('bg'),dn=document.getElementById('dn'),zn=document.getElementById('zn'),tf=document.getElementById('tf');
+function measure(){vh=innerHeight;H=secs[0].offsetHeight;items.forEach(function(it){var o=it.e,a=0;while(o){a+=o.offsetTop;o=o.offsetParent}it.a=a+it.e.offsetHeight/2})}
+function upd(){
+  var c=cur+vh/2,lim=vh*1.7;
+  if(!reduce)for(var i=0;i<items.length;i++){var it=items[i],d=c-it.a;if(d>lim||d<-lim)continue;it.e.style.transform='translate3d('+(d*it.vx).toFixed(1)+'px,'+(d*it.k).toFixed(1)+'px,0)'}
+  var s=cur/H;bgE.style.background='linear-gradient('+col(s)+','+col(s+.5)+')';
+  var m=depth(s);dn.textContent=Math.round(m).toLocaleString('en-US');
+  zn.textContent=m<5?'Surface':m<200?'Sunlight zone':m<1000?'Twilight zone':m<4000?'Midnight zone':'Abyssal zone';
+  tf.style.width=Math.min(100,cur/Math.max(1,document.documentElement.scrollHeight-vh)*100)+'%';
+}
+function tick(){cur+=(tgt-cur)*(reduce?1:.12);upd();if(Math.abs(tgt-cur)>.1)requestAnimationFrame(tick);else{cur=tgt;upd();run=false}}
+function kick(){tgt=scrollY;if(!run){run=true;requestAnimationFrame(tick)}}
+addEventListener('scroll',kick,{passive:true});
+addEventListener('resize',function(){measure();kick()});
+measure();cur=tgt=scrollY;theme();
+addEventListener('load',function(){measure();kick()});
+if(document.fonts)document.fonts.ready.then(function(){measure();kick()});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.25});
+[].forEach.call(document.querySelectorAll('.txt'),function(t){io.observe(t)});
+document.getElementById('up').onclick=function(){scrollTo({top:0,behavior:reduce?'auto':'smooth'})};
+})();
+</script>
+</body>
+</html>
